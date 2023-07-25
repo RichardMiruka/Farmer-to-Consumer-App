@@ -39,9 +39,13 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory and add the following:
 
 SECRET_KEY=your_secret_key_here
+
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+
 CLOUDINARY_API_KEY=your_cloudinary_api_key
+
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
 SENDGRID_API_KEY=your_sendgrid_api_key
 
 
@@ -49,7 +53,7 @@ SENDGRID_API_KEY=your_sendgrid_api_key
 
 1. Run the application:
 
-python run.py
+```python run.py```
 
 
 2. Access the application in your web browser at `http://localhost:5000`.
