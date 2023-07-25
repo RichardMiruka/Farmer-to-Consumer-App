@@ -18,6 +18,7 @@ The platform allows farmers to list their produce, and consumers can purchase qu
 - User registration and login with JWT authentication
 - Farmers can list their products with images
 - Consumers can browse and place orders for products
+- Payment Processing using Tingg Checkout V3 API
 - Data pagination for product listings
 - Swagger API documentation
 - Multi-user authentication with role-based access
