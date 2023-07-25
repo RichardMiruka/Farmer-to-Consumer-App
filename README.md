@@ -1,3 +1,4 @@
+![Image of a farmer's market - from Unsplash](shelley-pauls-kuR1Kwo4my4-unsplash.jpg)
 # Farmer-to-Consumer-Application
 This is a digital platform that connects farmers directly with consumers, bypassing intermediaries and reducing the overall cost of food products. 
 The platform allows farmers to list their produce, and consumers can purchase quality food at lower prices.
