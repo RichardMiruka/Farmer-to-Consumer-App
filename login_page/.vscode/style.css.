@@ -1,0 +1,25 @@
+.body {
+    font-size: 15pt;
+    background-color: greenyellow;
+}
+
+P{
+    font-weight: bold;
+    margin-top: 140px;
+    font-size: 30px
+}
+
+h3{
+    font-weight: lighter;
+}
+
+.button {
+    margin-top: 50px;
+    background-color: blue;
+    border-radius: 5px;
+    background-color: greenyellow;
+    box-sizing: 100px;
+}
+#username.hover{
+    color:aliceblue;
+}
