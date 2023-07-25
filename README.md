@@ -1,5 +1,7 @@
 # Farmer-to-Consumer-Application
-Farm-to-Consumer-Application is a digital platform that connects farmers directly with consumers, bypassing intermediaries and reducing the overall cost of food products. The platform allows farmers to list their produce, and consumers can purchase quality food at lower prices.
+Farm-to-Consumer-Application is a digital platform that connects farmers directly with consumers, bypassing intermediaries and reducing the overall cost of food products. 
+
+The platform allows farmers to list their produce, and consumers can purchase quality food at lower prices.
 
 ## Table of Contents
 - [Introduction](#farm-to-consumer-platform)
