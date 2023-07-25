@@ -28,7 +28,7 @@ The platform allows farmers to list their produce, and consumers can purchase qu
 ## Installation
 
 1. Clone the repository:
-    git clone https://github.com/RichardMiruka/Farmer-to-Consumer-App
+    git clone https://github.com/RichardMiruka/Farmer-to-Consumer-Application
 
 2. Install the required dependencies:
    pip install -r requirements.txt
