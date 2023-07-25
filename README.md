@@ -27,34 +27,32 @@ Farm-to-Consumer-Application is a digital platform that connects farmers directl
 ## Installation
 
 1. Clone the repository:
+    git clone https://github.com/RichardMiruka/Farmer-to-Consumer-App
 
-git clone https://github.com/RichardMiruka/Farmer-to-Consumer-App
-
-
-3. Install the required dependencies:
-pip install -r requirements.txt
-
+2. Install the required dependencies:
+   pip install -r requirements.txt
 
 4. Set up environment variables:
 
-Create a `.env` file in the root directory and add the following:
+    Create a `.env` file in the root directory and add the following:
 
-SECRET_KEY=your_secret_key_here
+    ```SECRET_KEY=your_secret_key_here
 
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 
-CLOUDINARY_API_KEY=your_cloudinary_api_key
+    CLOUDINARY_API_KEY=your_cloudinary_api_key
 
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-SENDGRID_API_KEY=your_sendgrid_api_key
+    SENDGRID_API_KEY=your_sendgrid_api_key
+    ```
 
 
 ## Usage
 
 1. Run the application:
 
-```python run.py```
+     ```python run.py```
 
 
 2. Access the application in your web browser at `http://localhost:5000`.
@@ -83,16 +81,20 @@ SENDGRID_API_KEY=your_sendgrid_api_key
 
 ## Contributing
 
-Contributions to the Farm-to-Consumer Platform are welcome! Please follow the standard guidelines for contributing to open-source projects.
+Contributions to the Farmer-to-Consumer Platform are welcome! Please follow the standard guidelines for contributing to open-source projects.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Authors
 <details>
 <summary>Authors</summary>
 
 * [**@Richard Miruka**](https://github.com/RichardMiruka)
+* [**@Sharoun Madoya**](https://github.com/Sharoun-Madoya)
+* [**@Sarah Mumbua**](https://github.com/sarahmumbua)
+* [**@Rebecca Nakhanu**](https://github.com/rebeccanakhanu)
+* [**@Bright Luvanda**](https://github.com/brightkingpin)
+
 
 </details>
