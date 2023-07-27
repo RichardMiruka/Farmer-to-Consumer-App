@@ -36,6 +36,11 @@ class User(db.Model):
     phoneNumber = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=db.func.now())
 
+class Login(db.Model):
+    __tablename__ = 'Login'
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(), unique = True, nullable = False)
+
 class Categories(db.Model):
     __tablename__ = 'Categories'
     categoryId = db.Column(db.Integer, primary_key=True)
