@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response, request
-from server.models import db, Product
+from server.models import db, Product,Order, User, Reviews
 import cloudinary
 import cloudinary.uploader
 
@@ -21,10 +21,9 @@ def create_product():
         price=data['price'],
         description=data['description'],
         image=image_url,
-        location=data['location'],
-        quantity=data['quantity'],
-        productid=data['productid']
-    )
+        location=data['location'],                      
+        quantity=data['quantity']
+          )
     db.session.add(product)
     db.session.commit()
     return jsonify({'message': 'Product created successfully'}), 201
@@ -73,3 +72,27 @@ def view_product(id):
     if not product:
         return jsonify({'message': 'Product not found'}), 404
     return jsonify(product.to_dict())
+
+
+@product_routes.route('/api/v1/Orders', methods=['GET'])
+def view_all_orders():
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+
+    # Query the products using pagination
+    orders = Order.query.paginate(page=page, per_page=per_page, error_out=False)
+    order_list= []
+    for order in orders.items:
+
+        order_data= {
+                'id': order.id,
+                'product_id': order.product_id,
+                'user_id': order.user_id,
+                'description': order.status,
+            }
+        order_list.append(order_data)
+
+    return jsonify({
+        'status': 'success',
+        'data': order_list
+    })
