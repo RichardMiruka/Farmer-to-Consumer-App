@@ -96,3 +96,94 @@ def view_all_orders():
         'status': 'success',
         'data': order_list
     })
+
+@product_routes.route('/api/v1/Reviews', methods=['GET'])
+def view_all_reviews():
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+
+    # Query the products using pagination
+    reviews = Reviews.query.paginate(page=page, per_page=per_page, error_out=False)
+    review_list= []
+    for review in reviews.items:
+        review_data= {
+                'id': review.id,
+                'product_id': review.product_id,
+                'user_id': review.user_id,
+                'comment': review.comment,
+                'rating' : review.rating
+            }
+        review_list.append(review_data)
+
+    return jsonify({
+        'status': 'success',
+        'data': review_list,
+        'pages': reviews.pages
+    })
+@product_routes.route('/api/v1/User', methods=['GET'])
+def view_all_user():
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+
+    # Query the products using pagination
+    user = User.query.paginate(page=page, per_page=per_page, error_out=False)
+    user_list= []
+    for user in user.items:
+        user_data= {
+                'id': user.id,
+                'username': user.username,
+                'phone number': user.phone_number,
+                'email': user.email,
+                'user_type' : user.user_type,
+                'description': user.status
+            }
+        user_list.append(user_data)
+
+    return jsonify({
+        'status': 'success',
+        'data': user_list
+    })
+
+
+@product_routes.route('/api/v1/User/create', methods=['POST'])
+def create_user():
+    data = request.json
+
+    user =User(
+        username=data['username'],
+        phone_number=data['phone_number'],
+        password=data['password'],
+        email=data['email'],                      
+        user_type=data['user_type'],
+        status=data['status']                      
+          )
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'message': 'User created successfully'}), 201
+
+@product_routes.route('/api/v1/Orders/create', methods=['POST'])
+def create_order():
+    data = request.json
+
+    order =Order(
+        product_id=data['product_id'],
+        user_id=data['user_id'],
+        status=data['status']                      
+          )
+    db.session.add(order)
+    db.session.commit()
+    return jsonify({'message': 'Order has been taken into consideration'}), 201
+
+@product_routes.route('/api/v1/Reviews/create', methods=['POST'])
+def create_review():
+    data = request.json
+
+    review =Reviews(
+        product_id=data['product_id'],
+        user_id=data['user_id'],
+        comment=data['comment'],                      
+        rating=data['rating']                     
+          )
+    db.session.add(review)
+    db.session.commit()
+    return jsonify({'message': 'Reviews have been greatly appreciated'}), 201
