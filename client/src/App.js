@@ -1,6 +1,6 @@
-import React from 'react';import React, { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import LoginPage from './container/login';
+import LoginPage from './container/LoginPage';
 import HomePage from './container/navbar';
 
 function App() {
