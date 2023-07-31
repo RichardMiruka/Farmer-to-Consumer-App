@@ -1,0 +1,60 @@
+body {
+    text-align: center;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    background-color: #f0f0f0;
+    padding: 10px;
+  }
+  
+  /* styles to center the form in LoginPage.js */
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  
+  .homepage {
+    text-align: center;
+    padding: 20px;
+    background-color: rgb(67, 176, 31);
+  }
+  
+  /* Styles to align the navigation links and logout button horizontally */
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navbar-menu li {
+    margin-right: 10px;
+  }
+  
+  .navbar-menu li:last-child {
+    margin-right: 0;
+  }
+  
+  .navbar-menu a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px;
+  }
+  
+  .navbar-menu button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
