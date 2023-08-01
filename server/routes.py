@@ -1,7 +1,11 @@
-from flask import Blueprint, request, jsonify, make_response, request
+from flask import Blueprint, request, jsonify, make_response, request, current_app
 from server.models import db, Product,Order, User, Reviews
 import cloudinary
 import cloudinary.uploader
+import jwt
+from datetime import datetime, timedelta
+from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
+from werkzeug.security import generate_password_hash,check_password_hash
 
 product_routes = Blueprint('product_routes', __name__)
 
@@ -135,7 +139,8 @@ def view_all_user():
                 'phone number': user.phone_number,
                 'email': user.email,
                 'user_type' : user.user_type,
-                'description': user.status
+                'status': user.status,
+                'password': user.password
             }
         user_list.append(user_data)
 
@@ -149,19 +154,23 @@ def view_all_user():
 def create_user():
     data = request.json
 
-    user =User(
-        username=data['username'],
-        phone_number=data['phone_number'],
-        password=data['password'],
-        email=data['email'],                      
-        user_type=data['user_type'],
-        status=data['status']                      
-          )
+    username=data['username']
+    phone_number=data['phone_number']
+    password=data['password']
+    email=data['email']                    
+    user_type=data['user_type']
+    status=data['status']
+    print(type(username))
+    password_harsh= generate_password_hash(password)
+    user= User(username=username, email=email, password=password_harsh, 
+               user_type=user_type,status=status,phone_number=phone_number)
+
     db.session.add(user)
     db.session.commit()
     return jsonify({'message': 'User created successfully'}), 201
 
 @product_routes.route('/api/v1/Orders/create', methods=['POST'])
+@jwt_required()
 def create_order():
     data = request.json
 
@@ -227,3 +236,34 @@ def search():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+
+@product_routes.route('/api/v1/Login', methods=['POST'])
+def login():
+    username =request.json["username"]
+    password =request.json["password"]
+    user=User.query.filter_by(username=username).first()
+    if  user and check_password_hash(user.password, password):
+        access_token=generate_token(user)
+        return jsonify({
+            "access-token" : access_token
+        }), 200
+    else:
+        return jsonify({
+            'error' :"Invalid credentials",
+        }),401
+
+
+
+def generate_token(user):
+    secret_key=current_app.config['JWT_SECRET_KEY']
+    expiration= datetime.utcnow()+timedelta(days=1)
+    payload={
+        "sub":user.id,
+        "user_id":user.id,
+        "exp":expiration,
+        "username":user.username,
+        "email":user.email
+    }
+    token=jwt.encode(payload, secret_key, algorithm= 'HS256')
+    return token

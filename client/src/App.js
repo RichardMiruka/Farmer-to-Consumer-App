@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
 import './App.css';
 import LoginPage from './container/login';
 import HomePage from './container/navbar';
 import ProductPage from './container/Product';
+import Order from './container/order';
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -18,17 +21,18 @@ function App() {
   };
 
   return (
-    <div className="">
-      {!loggedIn ? (
-        <LoginPage onLogin={handleLogin} />
-      ) : (
-        <>  
-        <HomePage onLogout={handleLogout} /> <br/>
-        <ProductPage/>
-        </>
+  
+    <Router>
+      <Route path='/' exact Component={HomePage}/>
+      <Route/>
+    </Router>
+      // {!loggedIn ? (
+      //   <LoginPage onLogin={handleLogin} />
+      // ) : (
+      //   <>  
+      //   <HomePage onLogout={handleLogout} /> <br/>
+      //   <ProductPage/>
+      //   </>
       ) }
-    </div>
-  );
-}
 
 export default App;
