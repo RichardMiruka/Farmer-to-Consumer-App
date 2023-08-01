@@ -4,6 +4,7 @@ from flask import Flask
 from server.models import db, migrate
 from flask_jwt_extended import JWTManager
 from server.routes import product_routes
+from flask_jwt_extended import JWTManager
 from server.config import Config
 import secrets
 
