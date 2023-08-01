@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response, request
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from server.models import db, Product,Order, User, Reviews
 import cloudinary
 import cloudinary.uploader
@@ -227,3 +228,11 @@ def search():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+    
+@product_routes.route('/api/v1/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user_id = get_jwt_identity()
+    # You can now use the current_user_id to retrieve the user from the database or perform any other actions
+    return jsonify({'message': 'You are accessing a protected route.', 'user_id': current_user_id}), 200  
+    
