@@ -1,38 +1,65 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.navbar-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    background-color: #f0f0f0;
+    padding: 10px;
   }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  body {
+    text-align: center;
   }
-  to {
-    transform: rotate(360deg);
+  
+
+  /* Add the following styles to center the form in LoginPage.js */
+
+  /* Styling for the homepage content */
+
+  /* Add the following styles to align the navigation links and logout button horizontally */
+  .navbar {
+    background-color: #9abd31;
+    padding: 10px 0;
   }
-}
+  
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    justify-content: center; /* Center align horizontally */
+    align-items: center; /* Center align vertically */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navbar-menu li {
+    margin-right: 10px;
+  }
+  
+  .navbar-menu li:last-child {
+    margin-right: 0;
+  }
+  
+  .navbar-menu a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px;
+  }
+  
+  .navbar-menu button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Additional styles for the homepage content */
+  .homepage-content {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px; /* Add a top margin to separate it from the navbar */
+    border: 1px solid #ccc; /* Add a border to separate it from the navbar */
+    background-color: rgb(31, 212, 209);
+  }

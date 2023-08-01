@@ -1,8 +1,8 @@
-import React from 'react';import React, { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import LoginPage from './container/login';
 import HomePage from './container/navbar';
-
+import ProductPage from './container/Product';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -18,15 +18,17 @@ function App() {
   };
 
   return (
-    <div className="navbar-container">
+    <div className="">
       {!loggedIn ? (
         <LoginPage onLogin={handleLogin} />
       ) : (
-        <HomePage onLogout={handleLogout} />
-      )}
+        <>  
+        <HomePage onLogout={handleLogout} /> <br/>
+        <ProductPage/>
+        </>
+      ) }
     </div>
   );
 }
 
 export default App;
-

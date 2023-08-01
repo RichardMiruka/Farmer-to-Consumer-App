@@ -1,4 +1,5 @@
 import React from 'react';
+import './navbar.css';
 import Homepage from './homepage';
 
 const Navbar = ({ onLogout }) => {
@@ -23,11 +24,9 @@ const Navbar = ({ onLogout }) => {
           </ul>
         </div>
       </nav>
-      
         <Homepage/>
-  
     </div>
   );
 };
 
-export default Navbar;#
+export default Navbar;
