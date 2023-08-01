@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, Float,ForeignKey
 from flask_migrate import Migrate
 
@@ -61,3 +62,15 @@ class Reviews(db.Model):
 
     def repr(self):
         return f'<Review {self.id}>'
+
+
+class Search(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    keyword = db.Column(db.String(100), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('searches', lazy=True))
+
+    def repr(self):
+        return f'<Search {self.id}>'

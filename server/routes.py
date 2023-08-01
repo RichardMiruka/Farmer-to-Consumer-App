@@ -187,3 +187,43 @@ def create_review():
     db.session.add(review)
     db.session.commit()
     return jsonify({'message': 'Reviews have been greatly appreciated'}), 201
+
+
+
+@product_routes.route('/api/v1/Search', methods=['POST'])
+def search():
+    data = request.json
+    user_id = data.get('user_id')
+    keyword = data.get('keyword')
+    
+    if not user_id or not keyword:
+        return jsonify({'error': 'Invalid request data'}), 400
+
+    try:
+        # Create a new Search record in the database
+        search = Search(user_id=user_id, keyword=keyword)
+        db.session.add(search)
+        db.session.commit()
+        
+        products = Product.query.filter(Product.name.ilike(f'%{keyword}%')).all()
+        product_list = []
+        for product in products:
+            product_data = {
+                'id': product.id,
+                'name': product.name,
+                'price': product.price,
+                'description': product.description,
+                'image': product.image,
+                'location': product.location,
+                'quantity': product.quantity
+            }
+            product_list.append(product_data)
+
+        return jsonify({
+            'status': 'success',
+            'data': product_list
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500

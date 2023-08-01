@@ -1,14 +1,12 @@
-body {
-    text-align: center;
-  }
+ body {
+  margin: 0;
+  text-align: center;
+  background-image: url("/home/sharoun/Development/code/Mod5/Farmer-to-Consumer-App/client/src/img/corn-5244801_1280.jpg");
+  background-position: centre;
+  font-family: Arial, Helvetica, sans-serif;
+  } 
   
-  .navbar-container {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    background-color: #f0f0f0;
-    padding: 10px;
-  }
+
   
   /* styles to center the form in LoginPage.js */
   form {
@@ -18,43 +16,18 @@ body {
     align-items: center;
     max-width: 300px;
     margin: 0 auto;
+    background-color: rgb(237, 177, 177);
+    color: white;
+    /* position:; */
+    transform: translate(-50%, );
+    box-sizing: border-box;
+    padding: 70px 30px;
   }
   
-  
+/*   
   .homepage {
     text-align: center;
     padding: 20px;
     background-color: rgb(67, 176, 31);
-  }
+  } */
   
-  /* Styles to align the navigation links and logout button horizontally */
-  .navbar-menu {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .navbar-menu li {
-    margin-right: 10px;
-  }
-  
-  .navbar-menu li:last-child {
-    margin-right: 0;
-  }
-  
-  .navbar-menu a {
-    text-decoration: none;
-    color: #333;
-    padding: 5px;
-  }
-  
-  .navbar-menu button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
