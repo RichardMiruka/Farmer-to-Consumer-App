@@ -29,6 +29,7 @@ def create_product():
     db.session.commit()
     return jsonify({'message': 'Product created successfully'}), 201
 
+
 @product_routes.route('/api/v1/products', methods=['GET'])
 def view_all_products():
     page = int(request.args.get('page', 1))
@@ -229,10 +230,12 @@ def search():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
     
+
+    
 @product_routes.route('/api/v1/protected', methods=['GET'])
 @jwt_required()
 def protected():
     current_user_id = get_jwt_identity()
-    # You can now use the current_user_id to retrieve the user from the database or perform any other actions
+    
     return jsonify({'message': 'You are accessing a protected route.', 'user_id': current_user_id}), 200  
     

@@ -34,6 +34,7 @@ class User(db.Model):
     email = db.Column(db.String(200), unique=True)  # Cloudinary public_id for the image
     user_type = db.Column(db.String())
     status = db.Column(db.String())
+    token = db.Column(db.String(64))
     def repr(self):
         return f'<User {self.id}>'
     
