@@ -34,6 +34,7 @@ def create_product():
     return jsonify({'message': 'Product created successfully'}), 201
 
 @product_routes.route('/api/v1/products', methods=['GET'])
+@jwt_required()
 def view_all_products():
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
@@ -93,7 +94,8 @@ def view_all_orders():
                 'id': order.id,
                 'product_id': order.product_id,
                 'user_id': order.user_id,
-                'description': order.status,
+                'status': order.status,
+                'orderDate':order.order_date
             }
         order_list.append(order_data)
 
@@ -101,6 +103,32 @@ def view_all_orders():
         'status': 'success',
         'data': order_list
     })
+
+
+@product_routes.route('/api/v1/Orders/<int:user_id>', methods=['GET'])
+def view_my_orders(user_id):
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+
+    # Query the products using pagination
+    orders = Order.query.filter_by(user_id=user_id).paginate(page=page, per_page=per_page, error_out=False)
+    order_list= []
+    for order in orders.items:
+
+        order_data= {
+                'id': order.id,
+                'product_id': order.product_id,
+                'user_id': order.user_id,
+                'status': order.status,
+                'orderDate':order.order_date
+            }
+        order_list.append(order_data)
+
+    return jsonify({
+        'status': 'success',
+        'data': order_list
+    })
+
 
 @product_routes.route('/api/v1/Reviews', methods=['GET'])
 def view_all_reviews():
@@ -160,9 +188,12 @@ def create_user():
     password=data['password']
     email=data['email']                    
     user_type=data['user_type']
-    status=data['status']
-    print(type(username))
+    status='Active'
     password_harsh= generate_password_hash(password)
+    if User.query.filter_by(username=username).first():
+        return jsonify({'error': 'Username already exist'}), 409
+    if User.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email already exist'}), 409
     user= User(username=username, email=email, password=password_harsh, 
                user_type=user_type,status=status,phone_number=phone_number)
 
@@ -178,7 +209,8 @@ def create_order():
     order =Order(
         product_id=data['product_id'],
         user_id=data['user_id'],
-        status=data['status']                      
+        status=data['status'],
+        order_date=datetime.utcnow()
           )
     db.session.add(order)
     db.session.commit()
