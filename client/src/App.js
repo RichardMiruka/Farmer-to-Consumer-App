@@ -5,6 +5,7 @@ import LoginPage from './container/login';
 import HomePage from './container/navbar';
 import ProductPage from './container/Product';
 import Order from './container/order';
+import Navbar from './container/navbar';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -21,11 +22,19 @@ function App() {
   };
 
   return (
-  
-    <Router>
-      <Route path='/' exact Component={HomePage}/>
-      <Route/>
-    </Router>
+      <div>
+        		<nav>
+              <Navbar/>
+        		</nav>
+      </div>
+
+      ) }
+
+export default App;
+
+
+
+
       // {!loggedIn ? (
       //   <LoginPage onLogin={handleLogin} />
       // ) : (
@@ -33,6 +42,3 @@ function App() {
       //   <HomePage onLogout={handleLogout} /> <br/>
       //   <ProductPage/>
       //   </>
-      ) }
-
-export default App;

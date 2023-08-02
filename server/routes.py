@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 product_routes = Blueprint('product_routes', __name__)
 
 @product_routes.route('/api/v1/products/create', methods=['POST'])
+@jwt_required()
 def create_product():
     data = request.form
 
