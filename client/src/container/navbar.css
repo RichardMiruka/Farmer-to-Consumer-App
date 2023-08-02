@@ -39,9 +39,21 @@
     cursor: pointer;
   }
 
-  .homepage {
+  .container {
     text-align: center;
     padding: 20px;
     /* background-color: rgb(222, 232, 219); */
   }
+
+  .display-4{
+    color: green;
+  }
   
+  #paragraph{
+    font-size: large;
+  }
+
+  .jumbotron{
+    padding-top: 30px;
+    margin-top: 30px;
+  }

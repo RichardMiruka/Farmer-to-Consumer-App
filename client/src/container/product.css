@@ -1,0 +1,17 @@
+/* .product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* Add some space between the cards */
+  /* }
+  
+  /* Media Query for Responsive Design (Optional) */
+  /* @media (max-width: 768px) {
+    .product-list {
+      justify-content: center;
+    }
+  
+    .card {
+      width: 100%;
+    } */
+   

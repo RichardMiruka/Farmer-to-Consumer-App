@@ -1,44 +1,23 @@
-import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import React from 'react';
 import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
 import './App.css';
+import Product from './container/Product';
+import Homepage from './container/homepage';
 import LoginPage from './container/login';
-import HomePage from './container/navbar';
-import ProductPage from './container/Product';
-import Order from './container/order';
-import Navbar from './container/navbar';
+import RegisterPage from './container/register';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    // Our group should perform login logic here (e.g., API call to the backend)
-    setLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    // We should perform logout logic here (e.g., API call to the backend)
-    setLoggedIn(false);
-    alert('Logged out successfully!');
-  };
 
   return (
-      <div>
-        		<nav>
-              <Navbar/>
-        		</nav>
-      </div>
-
+    <Router>
+     <Routes>
+      <Route path='/login'element={<LoginPage/>}/>
+      <Route path='/register' element={<RegisterPage/>}/>
+      <Route path='/products' element={<Product/>}/>
+      <Route path='/' element={<Homepage/>}/>
+     </Routes>
+    </Router>
       ) }
 
 export default App;
-
-
-
-
-      // {!loggedIn ? (
-      //   <LoginPage onLogin={handleLogin} />
-      // ) : (
-      //   <>  
-      //   <HomePage onLogout={handleLogout} /> <br/>
-      //   <ProductPage/>
-      //   </>
