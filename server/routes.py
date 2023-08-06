@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 product_routes = Blueprint('product_routes', __name__)
 
 @product_routes.route('/api/v1/products/create', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def create_product():
     data = request.form
 
@@ -34,7 +34,7 @@ def create_product():
     return jsonify({'message': 'Product created successfully'}), 201
 
 @product_routes.route('/api/v1/products', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def view_all_products():
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
