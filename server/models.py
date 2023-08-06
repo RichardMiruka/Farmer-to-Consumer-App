@@ -44,6 +44,7 @@ class Order(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable= False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= False)
     status = db.Column(db.String())
+    order_date=db.Column(db.DateTime)
     product=db.relationship('Product', backref= db.backref('orders', lazy=True))
     user=db.relationship('User', backref= db.backref('orders', lazy=True))
     

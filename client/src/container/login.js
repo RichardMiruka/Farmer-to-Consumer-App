@@ -1,29 +1,48 @@
 import React, { useState } from "react";
 import './login.css';
+import { useNavigate, Link } from 'react-router-dom'
 
 const LoginPage = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError]= useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //What to do with our app
-    // Wcan perform validation here and make API call to login
-    // For us to understand, we'll just log the user in with any input***
-    onLogin();
-  };
+  const navigate=useNavigate()
+  const handleLogin=async()=>{
+    try { const response=await fetch('http://127.0.0.1:5000/api/v1/Login',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({username, password}),
+  }
+  );
+  const data=await response.json()
+  if (response.ok){
+    localStorage.setItem("token",data['access_token'])
+    navigate('/products')
+  }
+  else{
+    setError(data.error)
+  }  
+    } catch (error) {
+      setError('An error occurred, please do try again')
+    }
+  }
+
 
   return (
     <div>
     <img src="client/src/img/shopping-4.png" alt="logo"/>
-      <form onSubmit={handleSubmit}>
+    {error && <p>{error}</p>}
+      <form>
         <h1>Log in</h1>
-        <label>Email</label>
+        <label>Username</label>
         <input
-          type='email'
-          placeholder='email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type='text'
+          placeholder='username'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <br />
         <label>Password</label>
@@ -34,10 +53,9 @@ const LoginPage = ({ onLogin }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type='submit'>Login</button>
-        <a href="#">Forgot your password?</a>
+        <button type='button' onClick={handleLogin}>Login</button>
         <br />
-        <a href="#">Don't have an account?</a>
+        <Link to="/register">Don't have an account?</Link>
       </form>
     </div>
   );
