@@ -43,8 +43,16 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable= False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable= False)
-    status = db.Column(db.String())
-    order_date=db.Column(db.DateTime)
+    amount = db.Column(db.Float, nullable=False)
+    mpesa_receipt_number = db.Column(db.String(255), nullable=False)
+    merchant_request_id = db.Column(db.String(255), nullable=False)
+    checkout_request_id = db.Column(db.String(255), nullable=False)
+    result_code = db.Column(db.Integer, nullable=False)
+    result_desc = db.Column(db.String(255), nullable=False)
+    order_status = db.Column(db.String(50), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
+    transaction_date=db.Column(db.DateTime)
+
     product=db.relationship('Product', backref= db.backref('orders', lazy=True))
     user=db.relationship('User', backref= db.backref('orders', lazy=True))
     

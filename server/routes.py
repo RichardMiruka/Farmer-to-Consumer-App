@@ -3,11 +3,104 @@ from server.models import db, Product,Order, User, Reviews
 import cloudinary
 import cloudinary.uploader
 import jwt
+from sqlalchemy import func
 from datetime import datetime, timedelta
 from flask_jwt_extended import jwt_required, get_jwt_identity, JWTManager
 from werkzeug.security import generate_password_hash,check_password_hash
+import requests
+import base64
+from requests.auth import HTTPBasicAuth
 
 product_routes = Blueprint('product_routes', __name__)
+consumer_key='0gc0uEwGcFcoxtHXIySEPF5ek4k8uvhf'
+consumer_secret='6UvaqPmZWjdDlbGj'
+my_endpoint = 'https://c001-41-80-116-223.ngrok-free.app' #callback url
+@product_routes.route('/access_token')
+def token():
+    data = access_token()
+    return data
+
+def access_token():
+    mpesa_auth_url='https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+    data = (requests.get(mpesa_auth_url, auth=HTTPBasicAuth(consumer_key,consumer_secret))).json()
+    return data['access_token'] 
+
+@product_routes.route('/pay',methods=['POST']) 
+def MpesaExpress():
+    data = request.json
+    amount = data['amount']
+    phone = data['phone']
+    endpoint = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+    access_token_value = access_token()
+    print(access_token_value)
+    headers = { "Authorization": "Bearer %s" %access_token_value}
+    TimeStamp = datetime.now()
+    times = TimeStamp.strftime("%Y%m%d%H%M%S")
+    password = "174379" + "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919" + times
+    datapass = base64.b64encode(password.encode('utf-8')).decode('utf-8') 
+    data = {
+        "BusinessShortCode": "174379",
+        "Password": datapass,
+        "Timestamp": times,
+        "TransactionType": "CustomerPayBillOnline",
+        "PartyA": phone, # fill with your phone number
+        "PartyB": "174379",
+        "PhoneNumber": phone, # fill with your phone number
+        "CallBackURL": my_endpoint+ "/lmno-callback",
+        "AccountReference": "ECO-GREEN FARMERS",
+        "TransactionDesc": "HelloTest",
+        "Amount": amount
+    }
+    res = requests.post(endpoint,json=data, headers = headers)
+    print(res)
+    return res.json()
+@product_routes.route('/lmno-callback', methods=['POST'])
+def incoming():
+    data = request.get_json()
+    print("Incoming Callback Request:")
+    print(request.data.decode('utf-8'))
+    callback_data = data.get('Body', {}).get('stkCallback', {})
+    print(callback_data)
+    return "ok"
+    # Extract relevant information from the callback data
+    # merchant_request_id = callback_data.get('MerchantRequestID')
+    # checkout_request_id = callback_data.get('CheckoutRequestID')
+    # result_code = callback_data.get('ResultCode')
+    # result_desc = callback_data.get('ResultDesc')
+    # mpesa_receipt_number = callback_data.get('CallbackMetadata', {}).get('Item', [])[1].get('Value')
+    # transaction_date_str = datetime.now()
+    # phone_number = callback_data.get('CallbackMetadata', {}).get('Item', [])[4].get('Value')
+    # print(merchant_request_id)
+    # try:
+    #     # Find the user_id based on phone_number
+    #     user = User.query.filter_by(phone_number=phone_number).first()
+
+    #     if user:
+    #         # Create an Order and save it to the database
+            
+    #         order = Order(
+    #             user_id=user.id,
+    #             mpesa_receipt_number=mpesa_receipt_number,
+    #             merchant_request_id=merchant_request_id,
+    #             checkout_request_id=checkout_request_id,
+    #             result_code=result_code,
+    #             result_desc=result_desc,
+    #             order_status='Pending',  # You can set the initial status here
+    #             phone_number=phone_number,
+    #             amount=1.0,  # Adjust this according to your data
+    #             transaction_date=transaction_date_str
+    #         )
+    #         db.session.add(order)
+    #         db.session.commit()
+
+    #         return jsonify({'message': 'Order created successfully'})
+    #     else:
+    #         return jsonify({'error': 'User not found'}), 404
+
+    # except Exception as e:
+    #     print(str(e))
+    #     return jsonify({'error': str(e)}), 500
+@product_routes.route('/register_urls')
 
 @product_routes.route('/api/v1/products/create', methods=['POST'])
 # @jwt_required()
@@ -32,27 +125,37 @@ def create_product():
     db.session.add(product)
     db.session.commit()
     return jsonify({'message': 'Product created successfully'}), 201
-
 @product_routes.route('/api/v1/products', methods=['GET'])
-# @jwt_required()
 def view_all_products():
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
 
     # Query the products using pagination
     products = Product.query.paginate(page=page, per_page=per_page, error_out=False)
-    product_list = [
-        {
+    
+    product_list = []
+
+    for product in products.items:
+        # Calculate average rating for the product
+        avg_rating = db.session.query(func.avg(Reviews.rating)).filter_by(product_id=product.id).scalar()
+        
+        # Fetch comments for the product
+        comments = Reviews.query.filter_by(product_id=product.id).all()
+        comment_list = [{'comment': comment.comment, 'user_id': comment.user_id} for comment in comments]
+        
+        product_data = {
             'id': product.id,
             'name': product.name,
             'price': product.price,
             'description': product.description,
             'image': product.image,
             'location': product.location,
-            'quantity': product.quantity
+            'quantity': product.quantity,
+            'avg_rating': avg_rating,  # Average rating
+            'comments': comment_list  # Comments list
         }
-        for product in products.items
-    ]
+        
+        product_list.append(product_data)
 
     response_body = {
         'status': 'success',
@@ -72,14 +175,26 @@ def view_all_products():
 
     return response
 
+
 @product_routes.route('/api/v1/products/<int:id>', methods=['GET'])
 def view_product(id):
     product = Product.query.get(id)
+    
     if not product:
         return jsonify({'message': 'Product not found'}), 404
-    return jsonify(product.to_dict())
+    
+    # Calculate average rating for the product
+    avg_rating = db.session.query(func.avg(Reviews.rating)).filter_by(product_id=id).scalar()
+    
+    # Fetch comments for the product
+    comments = Reviews.query.filter_by(product_id=id).all()
+    comment_list = [{'comment': comment.comment, 'user_id': comment.user_id} for comment in comments]
+    
+    product_data = product.to_dict()
+    product_data['avg_rating'] = avg_rating
+    product_data['comments'] = comment_list
 
-
+    return jsonify(product_data)
 @product_routes.route('/api/v1/Orders', methods=['GET'])
 def view_all_orders():
     page = int(request.args.get('page', 1))

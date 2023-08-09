@@ -2,7 +2,7 @@ import cloudinary
 
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:SHAR0007@localhost/farmer_to_consumer_app'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:admin@localhost/farmers_db'
     # SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://sharoun:SHAR0007@localhost/farmer_to_consumer_app'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
