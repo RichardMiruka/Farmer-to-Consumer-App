@@ -68,7 +68,7 @@ idna==2.9
 inflection==0.5.1
 iniconfig==2.0.0
 ipykernel==6.11.0
-ipython==8.2.0
+ipython==7.34.0
 ipython-genutils==0.2.0
 isodate==0.6.1
 itypes==1.2.0
