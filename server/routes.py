@@ -103,7 +103,6 @@ def incoming():
 @product_routes.route('/register_urls')
 
 @product_routes.route('/api/v1/products/create', methods=['POST'])
-# @jwt_required()
 def create_product():
     data = request.form
 
@@ -126,9 +125,10 @@ def create_product():
     db.session.commit()
     return jsonify({'message': 'Product created successfully'}), 201
 @product_routes.route('/api/v1/products', methods=['GET'])
+@jwt_required()
 def view_all_products():
     page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 10))
+    per_page = int(request.args.get('per_page', 20))
 
     # Query the products using pagination
     products = Product.query.paginate(page=page, per_page=per_page, error_out=False)
@@ -141,7 +141,16 @@ def view_all_products():
         
         # Fetch comments for the product
         comments = Reviews.query.filter_by(product_id=product.id).all()
-        comment_list = [{'comment': comment.comment, 'user_id': comment.user_id} for comment in comments]
+        comment_list = []
+
+        for comment in comments:
+            user = User.query.get(comment.user_id)
+            if user:
+                comment_data = {
+                    'comment': comment.comment,
+                    'user_username': user.username  # Fetch username from user
+                }
+                comment_list.append(comment_data)
         
         product_data = {
             'id': product.id,
@@ -151,13 +160,13 @@ def view_all_products():
             'image': product.image,
             'location': product.location,
             'quantity': product.quantity,
-            'avg_rating': avg_rating,  # Average rating
+            'avg_rating': round(avg_rating, 1) if avg_rating else None,  # Rounded avg_rating
             'comments': comment_list  # Comments list
         }
         
         product_list.append(product_data)
 
-    response_body = {
+        response_body = {
         'status': 'success',
         'data': product_list,
         'pagination': {
@@ -170,10 +179,7 @@ def view_all_products():
         }
     }
 
-    response = make_response(jsonify(response_body), 200)
-    response.headers['Content-Type'] = 'application/json'
-
-    return response
+    return jsonify(response_body), 200
 
 
 @product_routes.route('/api/v1/products/<int:id>', methods=['GET'])
@@ -188,13 +194,31 @@ def view_product(id):
     
     # Fetch comments for the product
     comments = Reviews.query.filter_by(product_id=id).all()
-    comment_list = [{'comment': comment.comment, 'user_id': comment.user_id} for comment in comments]
-    
-    product_data = product.to_dict()
-    product_data['avg_rating'] = avg_rating
-    product_data['comments'] = comment_list
+    comment_list = []
 
-    return jsonify(product_data)
+    for comment in comments:
+        user = User.query.get(comment.user_id)
+        if user:
+            comment_data = {
+                'comment': comment.comment,
+                'user_username': user.username  # Fetch username from user
+            }
+            comment_list.append(comment_data)
+    
+    product_data = {
+        'id': product.id,
+        'name': product.name,
+        'price': product.price,
+        'description': product.description,
+        'image': product.image,
+        'location': product.location,
+        'quantity': product.quantity,
+        'avg_rating': round(avg_rating, 1) if avg_rating else None,  # Rounded avg_rating
+        'comments': comment_list  # Comments list
+    }
+
+    return jsonify(product_data), 200
+
 @product_routes.route('/api/v1/Orders', methods=['GET'])
 def view_all_orders():
     page = int(request.args.get('page', 1))
@@ -411,7 +435,8 @@ def generate_token(user):
         "user_id":user.id,
         "exp":expiration,
         "username":user.username,
-        "email":user.email
+        "email":user.email,
+        "usertype":user.user_type
     }
     token=jwt.encode(payload, secret_key, algorithm= 'HS256')
     return token
